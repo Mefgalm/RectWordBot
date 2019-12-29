@@ -1,14 +1,9 @@
 ﻿open System
-open Funogram
 open Funogram.Api
-open Funogram.Telegram
-open Funogram.Tools
 open Funogram.Telegram.Api
 open Words.Word
 open Funogram.Telegram.Bot
-open Funogram.Telegram.Bot
 open Funogram.Telegram.Types
-open Words
 open Words.Meme
 
 type OptionBuilder() =
@@ -18,9 +13,9 @@ type OptionBuilder() =
     
 let option = OptionBuilder()    
 
-let sendTextMessage config chatId text =
-    sendMessageBase (ChatId.Int chatId) text (Some ParseMode.Markdown) None None None None
-    |> api config 
+let apiSend config f =
+    f()
+    |> api config
     |> Async.Ignore
     |> Async.Start
 
@@ -32,7 +27,9 @@ let onStart context (rectWord, word) =
             | Ok res -> sprintf "```\n%s```" res
             | Error er -> sprintf "Error: %s" er
         
-        sendTextMessage context.Config message.Chat.Id text
+        apiSend
+            context.Config
+            (fun () -> sendMessageBase (ChatId.Int message.Chat.Id) text (Some ParseMode.Markdown) None None None None)
     }
     |> ignore
     
@@ -45,31 +42,20 @@ example:
 
 /meme"
         
-        sendTextMessage context.Config message.Chat.Id result
+        apiSend
+            context.Config
+            (fun () -> sendMessage message.Chat.Id result)
     }
     |> ignore
     
-let onHello context =
-    option {
-        let! message = context.Update.Message
-        let! name = message.Chat.FirstName
-        sprintf "Hello, %s!" name
-        |> sendMessage message.Chat.Id
-        |> api context.Config
-        |> Async.Ignore
-        |> Async.Start
-    }
-    |> ignore
-
 let onMeme (context: UpdateContext) =
     option {
         let! message = context.Update.Message
         let newMeme = getMeme()
         
-        sendPhoto message.Chat.Id (FileToSend.Url <| Uri newMeme.url) newMeme.title
-        |> api context.Config
-        |> Async.Ignore
-        |> Async.Start
+        apiSend
+            context.Config
+            (fun () -> sendPhoto message.Chat.Id (FileToSend.Url <| Uri newMeme.url) newMeme.title)
     }
     |> ignore
 
@@ -81,14 +67,12 @@ let onUpdate (context: UpdateContext) =
   ]
   |> ignore
 
-let prodToken = "887888810:AAGHluamUkJ99X7G1dACCTL4hfcjxhQcV-I"
-let testToken = "911472698:AAHCKpLvTsOyjNJD_PT-gZxsdHjVi1onJ5g"
 
 [<EntryPoint>]
 let main argv =
     startBot {
         defaultConfig with
-          Token = prodToken
+          Token = Environment.GetEnvironmentVariable("BotToken")
     } onUpdate None
     |> Async.RunSynchronously
     |> ignore
