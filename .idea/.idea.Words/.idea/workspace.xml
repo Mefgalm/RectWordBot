@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a30d5f61-5f68-41d0-8368-433fe5bc4094" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Words/Meme.fs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Words/Program.fs" beforeDir="false" afterPath="$PROJECT_DIR$/Words/Program.fs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Words/Word.fs" beforeDir="false" afterPath="$PROJECT_DIR$/Words/Word.fs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Words/Words.fsproj" beforeDir="false" afterPath="$PROJECT_DIR$/Words/Words.fsproj" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,6 +17,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Words/Meme.fs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Words/Program.fs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/674AD298-EC84-894A-6E49-B84D9A6C2200/30/fca939e0/Bot.cs" root0="SKIP_HIGHLIGHTING" />
@@ -27,6 +29,7 @@
       <list>
         <option value="$PROJECT_DIR$/Words/Test.fsx" />
         <option value="$PROJECT_DIR$/Words/Word.fs" />
+        <option value="$PROJECT_DIR$/Words/Meme.fs" />
         <option value="$PROJECT_DIR$/Words/Program.fs" />
       </list>
     </option>
@@ -82,7 +85,7 @@
       <updated>1577446201566</updated>
       <workItem from="1577446202758" duration="87000" />
       <workItem from="1577458744829" duration="132000" />
-      <workItem from="1577487298836" duration="17130000" />
+      <workItem from="1577487298836" duration="18909000" />
     </task>
     <servers />
   </component>

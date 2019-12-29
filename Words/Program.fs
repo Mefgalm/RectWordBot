@@ -8,6 +8,8 @@ open Words.Word
 open Funogram.Telegram.Bot
 open Funogram.Telegram.Bot
 open Funogram.Telegram.Types
+open Words
+open Words.Meme
 
 type OptionBuilder() =
     member this.Bind(x, f) = Option.bind f x
@@ -39,7 +41,9 @@ let onHelp context =
         let! message = context.Update.Message
         let result = "/start <border word> <inner word>
 example:
-/start HAPPYNEWYEAR 2020"
+/start HAPPYNEWYEAR 2020
+
+/meme"
         
         sendTextMessage context.Config message.Chat.Id result
     }
@@ -57,20 +61,34 @@ let onHello context =
     }
     |> ignore
 
+let onMeme (context: UpdateContext) =
+    option {
+        let! message = context.Update.Message
+        let newMeme = getMeme()
+        
+        sendPhoto message.Chat.Id (FileToSend.Url <| Uri newMeme.url) newMeme.title
+        |> api context.Config
+        |> Async.Ignore
+        |> Async.Start
+    }
+    |> ignore
 
 let onUpdate (context: UpdateContext) =
   processCommands context [
-    cmd "/hello" onHello
     cmd "/help" onHelp
+    cmd "/meme" onMeme
     cmdScan "/start %s %s" (onStart context)
   ]
   |> ignore
+
+let prodToken = "887888810:AAGHluamUkJ99X7G1dACCTL4hfcjxhQcV-I"
+let testToken = "911472698:AAHCKpLvTsOyjNJD_PT-gZxsdHjVi1onJ5g"
 
 [<EntryPoint>]
 let main argv =
     startBot {
         defaultConfig with
-          Token = "887888810:AAGHluamUkJ99X7G1dACCTL4hfcjxhQcV-I"
+          Token = prodToken
     } onUpdate None
     |> Async.RunSynchronously
     |> ignore
