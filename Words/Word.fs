@@ -64,13 +64,16 @@ let mergeRects (backGround: char[][]) (foreGround: char[][]) =
     |> Seq.reduce (sprintf "%s\n%s")
     
 let wrapWord (rectWord: string) (word: string) =
-    if word.Length < 1 || rectWord.Length < 5 then
-        failwith "Rect Word length must be greater or equals 5 and Inner Word length must be greater or equals 1"
-    
-    let innerBlockSize = rectWord.Length - 4
-    
-    let rectAreaWithWord = rectWord |> buildRect
-    
-    let splitedWordInRect = word |> splitWord innerBlockSize |> wordToRect innerBlockSize
-    
-    mergeRects rectAreaWithWord splitedWordInRect
+    if word.Length < 1 then
+        Error "Inner Word's length should be at least 1 symbol"
+    elif rectWord.Length < 5 then
+        Error "Border Word's length should be at least 5 symbol"
+    else
+        let innerBlockSize = rectWord.Length - 4
+        
+        let rectAreaWithWord = rectWord |> buildRect
+        
+        let splitedWordInRect = word |> splitWord innerBlockSize |> wordToRect innerBlockSize
+        
+        mergeRects rectAreaWithWord splitedWordInRect
+        |> Ok

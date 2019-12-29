@@ -17,7 +17,7 @@ type OptionBuilder() =
 let option = OptionBuilder()    
 
 let sendTextMessage config chatId text =
-    sendMessage chatId text
+    sendMessageBase (ChatId.Int chatId) text (Some ParseMode.Markdown) None None None None
     |> api config 
     |> Async.Ignore
     |> Async.Start
@@ -25,9 +25,12 @@ let sendTextMessage config chatId text =
 let onStart context (rectWord, word) =
     option {
         let! message = context.Update.Message
-        let result = sprintf "%s" (wrapWord rectWord word)
+        let text =
+            match wrapWord rectWord word with
+            | Ok res -> sprintf "```\n%s```" res
+            | Error er -> sprintf "Error: %s" er
         
-        sendTextMessage context.Config message.Chat.Id result
+        sendTextMessage context.Config message.Chat.Id text
     }
     |> ignore
     
